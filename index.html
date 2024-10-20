@@ -21,19 +21,7 @@
             font-size: 30px;
             font-weight: bold;
         }
-         .rankings {
-            background-color: #fff;
-            padding: 20px;
-            margin: 20px auto;
-            max-width: 800px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
 
-        .rankings-title {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
         table {
             width: 80%;
             margin: 20px auto;
@@ -41,10 +29,12 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             background-color: #fff;
         }
+
         .logo {
             max-width: 250px;
             margin: 0px;
         }
+
         th, td {
             padding: 12px 15px;
             text-align: left;
@@ -71,66 +61,64 @@
 </head>
 <body>
     <header>
-        <img src="https://logotyp.us/file/hr-block.svg" alt="H&R Block Logo" class="logo">
+        <img src="https://logotyp.us/file/hr-block.svg" alt="H&R Block Logo" class="logo" align="left">
+        <h1><b>Password Strength Ranking</b></h1>
     </header>
 
-    <div class="rankings">
-        <h2 class="rankings-title">Participant Rank</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Score</th>
-                    <th>Rank</th>
-                </tr>
-            </thead>
-            <tbody id="rankingTable">
-                <!-- Rankings will be inserted here dynamically -->
-            </tbody>
-        </table>
-        
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Password Strength</th>
+            <th>Rank</th> <!-- New column for Rank -->
+        </tr>
+        <tbody id="rankingTable">
+            <!-- Ranking data will be displayed here dynamically -->
+        </tbody>
+    </table>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-        <script>
-            // URL to the CSV file in your GitHub repository
-            const csvUrl = 'https://raw.githubusercontent.com/Gokulgoky1/Password-Strength-Report/refs/heads/main/Ranking.csv';
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script>
+        // URL to the CSV file in your GitHub repository
+        const csvUrl = 'https://raw.githubusercontent.com/Gokulgoky1/Password-Strength-Report/refs/heads/main/Ranking.csv';
 
-            // Fetch and display the CSV data
+        // Function to fetch and display ranking data dynamically
+        function updateRanking() {
             Papa.parse(csvUrl, {
                 download: true,
                 header: true,
                 complete: function(results) {
                     const data = results.data;
-                    const tableBody = document.getElementById('rankingTable');
+                    const rankingTable = document.getElementById('rankingTable');
+                    rankingTable.innerHTML = ''; // Clear existing data
 
-                    // Loop through each row and create table rows
-                    data.forEach(row => {
-                        const tr = document.createElement('tr');
+                    // Sort by strength in descending order
+                    data.sort((a, b) => b.strength - a.strength);
 
-                        const nameCell = document.createElement('td');
-                        nameCell.textContent = row['name'];
-                        nameCell.style.fontWeight = 'bold';
-                        nameCell.style.fontSize = '16px';
-                        tr.appendChild(nameCell);
+                    // Initialize rank and previous strength
+                    let rank = 0;
+                    let prevStrength = null;
 
-                        const scoreCell = document.createElement('td');
-                        scoreCell.textContent = row['strength'];
-                        scoreCell.style.fontWeight = 'bold';
-                        scoreCell.style.fontSize = '16px';
-                        tr.appendChild(scoreCell);
-
-                        const rankCell = document.createElement('td');
-                        rankCell.textContent = row['rank'];
-                        rankCell.style.fontWeight = 'bold';
-                        rankCell.style.fontSize = '16px';
-                        tr.appendChild(rankCell);
-
-                        tableBody.appendChild(tr);
+                    data.forEach(entry => {
+                        const row = document.createElement('tr');
+                        if (entry.strength !== prevStrength) {
+                            // Only increment rank if strength is different from the previous entry
+                            rank++;
+                        }
+                        row.innerHTML = `
+                            <td><strong>${entry.name}</strong></td>
+                            <td><strong>${entry.strength}</strong></td>
+                            <td><strong>${rank}</strong></td>
+                        `;
+                        rankingTable.appendChild(row);
+                        prevStrength = entry.strength;
                     });
                 }
             });
+        }
 
-        </script>
-    </div>
+        // Call updateRanking() initially and then every 5 seconds
+        updateRanking();
+        setInterval(updateRanking, 5000);
+    </script>
 </body>
 </html>
