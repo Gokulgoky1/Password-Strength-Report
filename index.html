@@ -22,30 +22,17 @@
             font-weight: bold;
         }
 
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
         .logo {
             max-width: 250px;
-            margin: 0;
+            margin: 0px;
         }
-
-        .rankings {
-            background-color: #fff;
-            padding: 20px;
-            margin: 20px auto;
-            max-width: 800px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .rankings-title {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
         th, td {
             padding: 12px 15px;
             text-align: left;
@@ -53,7 +40,7 @@
 
         th {
             background-color: #30a447;
-            color: white;
+            color: #fff;
         }
 
         tr:nth-child(even) {
@@ -64,12 +51,9 @@
             background-color: #ddd;
         }
 
-        button {
-            background-color: #51994d;
-            color: white;
-            padding: 10px 20px;
-            cursor: pointer;
-            border: none;
+        #rankingTable {
+            max-height: 400px;
+            overflow-y: auto;
         }
     </style>
 </head>
@@ -88,7 +72,7 @@
                     <th>Rank</th>
                 </tr>
             </thead>
-            <tbody id="rankingTableBody">
+            <tbody id="rankingTable">
                 <!-- Rankings will be inserted here dynamically -->
             </tbody>
         </table>
