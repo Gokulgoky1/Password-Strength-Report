@@ -1,46 +1,140 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>CSV Data Display</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <title>Password Strength Ranking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #f4f4f4;
+            color: #539750;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .logo {
+            max-width: 250px;
+            margin: 0;
+        }
+
+        .rankings {
+            background-color: #fff;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 800px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .rankings-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #30a447;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+
+        button {
+            background-color: #51994d;
+            color: white;
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+        }
+    </style>
 </head>
 <body>
-    <h2>Live CSV Data</h2>
-    <table id="csvTable" border="1" cellpadding="5"></table>
+    <header>
+        <img src="https://logotyp.us/file/hr-block.svg" alt="H&R Block Logo" class="logo">
+    </header>
 
-    <script>
-        // URL of your CSV file in the GitHub repository
-        const csvUrl = 'https://raw.githubusercontent.com/Gokulgoky1/Password-Strength-Report/refs/heads/main/Ranking.csv';
+    <div class="rankings">
+        <h2 class="rankings-title">Participant Rank</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Score</th>
+                    <th>Rank</th>
+                </tr>
+            </thead>
+            <tbody id="rankingTableBody">
+                <!-- Rankings will be inserted here dynamically -->
+            </tbody>
+        </table>
+        
 
-        Papa.parse(csvUrl, {
-            download: true,
-            header: true,
-            complete: function(results) {
-                const table = document.getElementById("csvTable");
-                let data = results.data;
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+        <script>
+            // URL to the CSV file in your GitHub repository
+            const csvUrl = 'https://raw.githubusercontent.com/Gokulgoky1/Password-Strength-Report/refs/heads/main/Ranking.csv';
 
-                // Add table headers
-                let headers = Object.keys(data[0]);
-                let headerRow = document.createElement("tr");
-                headers.forEach(header => {
-                    let th = document.createElement("th");
-                    th.innerText = header;
-                    headerRow.appendChild(th);
-                });
-                table.appendChild(headerRow);
+            // Fetch and display the CSV data
+            Papa.parse(csvUrl, {
+                download: true,
+                header: true,
+                complete: function(results) {
+                    const data = results.data;
+                    const tableBody = document.getElementById('rankingTableBody');
 
-                // Add data rows
-                data.forEach(row => {
-                    let tr = document.createElement("tr");
-                    headers.forEach(header => {
-                        let td = document.createElement("td");
-                        td.innerText = row[header];
-                        tr.appendChild(td);
+                    // Loop through each row and create table rows
+                    data.forEach(row => {
+                        const tr = document.createElement('tr');
+
+                        const nameCell = document.createElement('td');
+                        nameCell.textContent = row['Name'];
+                        nameCell.style.fontWeight = 'bold';
+                        nameCell.style.fontSize = '16px';
+                        tr.appendChild(nameCell);
+
+                        const scoreCell = document.createElement('td');
+                        scoreCell.textContent = row['Score'];
+                        scoreCell.style.fontWeight = 'bold';
+                        scoreCell.style.fontSize = '16px';
+                        tr.appendChild(scoreCell);
+
+                        const rankCell = document.createElement('td');
+                        rankCell.textContent = row['Rank'];
+                        rankCell.style.fontWeight = 'bold';
+                        rankCell.style.fontSize = '16px';
+                        tr.appendChild(rankCell);
+
+                        tableBody.appendChild(tr);
                     });
-                    table.appendChild(tr);
-                });
-            }
-        });
-    </script>
+                }
+            });
+
+        </script>
+    </div>
 </body>
 </html>
