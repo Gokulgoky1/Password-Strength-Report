@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CSV Data Display</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+</head>
+<body>
+    <h2>Live CSV Data</h2>
+    <table id="csvTable" border="1" cellpadding="5"></table>
+
+    <script>
+        // URL of your CSV file in the GitHub repository
+        const csvUrl = https://github.com/Gokulgoky1/Password-Strength-Report/blob/main/Ranking.csv';
+
+        Papa.parse(csvUrl, {
+            download: true,
+            header: true,
+            complete: function(results) {
+                const table = document.getElementById("csvTable");
+                let data = results.data;
+
+                // Add table headers
+                let headers = Object.keys(data[0]);
+                let headerRow = document.createElement("tr");
+                headers.forEach(header => {
+                    let th = document.createElement("th");
+                    th.innerText = header;
+                    headerRow.appendChild(th);
+                });
+                table.appendChild(headerRow);
+
+                // Add data rows
+                data.forEach(row => {
+                    let tr = document.createElement("tr");
+                    headers.forEach(header => {
+                        let td = document.createElement("td");
+                        td.innerText = row[header];
+                        tr.appendChild(td);
+                    });
+                    table.appendChild(tr);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
