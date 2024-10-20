@@ -81,44 +81,44 @@
         // URL to the CSV file in your GitHub repository
         const csvUrl = 'https://raw.githubusercontent.com/Gokulgoky1/Password-Strength-Report/refs/heads/main/Ranking.csv';
 
-        // Function to fetch and display ranking data dynamically
-        function updateRanking() {
+        // Fetch and display the CSV data
             Papa.parse(csvUrl, {
                 download: true,
                 header: true,
                 complete: function(results) {
                     const data = results.data;
-                    const rankingTable = document.getElementById('rankingTable');
-                    rankingTable.innerHTML = ''; // Clear existing data
+                    const tableBody = document.getElementById('rankingTable');
 
-                    // Sort by strength in descending order
-                    data.sort((a, b) => b.strength - a.strength);
+                    // Loop through each row and create table rows
+                    data.forEach(row => {
+                        const tr = document.createElement('tr');
 
-                    // Initialize rank and previous strength
-                    let rank = 0;
-                    let prevStrength = null;
+                        const nameCell = document.createElement('td');
+                        nameCell.textContent = row['name'];
+                        nameCell.style.fontWeight = 'bold';
+                        nameCell.style.fontSize = '16px';
+                        tr.appendChild(nameCell);
 
-                    data.forEach(entry => {
-                        const row = document.createElement('tr');
-                        if (entry.strength !== prevStrength) {
-                            // Only increment rank if strength is different from the previous entry
-                            rank++;
-                        }
-                        row.innerHTML = `
-                            <td><strong>${entry.name}</strong></td>
-                            <td><strong>${entry.strength}</strong></td>
-                            <td><strong>${rank}</strong></td>
-                        `;
-                        rankingTable.appendChild(row);
-                        prevStrength = entry.strength;
+                        const scoreCell = document.createElement('td');
+                        scoreCell.textContent = row['strength'];
+                        scoreCell.style.fontWeight = 'bold';
+                        scoreCell.style.fontSize = '16px';
+                        tr.appendChild(scoreCell);
+
+                        const rankCell = document.createElement('td');
+                        rankCell.textContent = row['rank'];
+                        rankCell.style.fontWeight = 'bold';
+                        rankCell.style.fontSize = '16px';
+                        tr.appendChild(rankCell);
+
+                        tableBody.appendChild(tr);
                     });
                 }
             });
-        }
 
-        // Call updateRanking() initially and then every 5 seconds
-        updateRanking();
-        setInterval(updateRanking, 5000);
+        // // Call updateRanking() initially and then every 5 seconds
+        // updateRanking();
+        // setInterval(updateRanking, 5000);
     </script>
 </body>
 </html>
