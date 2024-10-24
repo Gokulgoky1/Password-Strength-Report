@@ -68,6 +68,7 @@
     <table>
         <tr>
             <th>Name</th>
+            <th>Company</th
             <th>Email</th>
             <th>Strength Score</th>
             <th>Rank</th> <!-- New column for Rank -->
@@ -98,6 +99,11 @@
                         nameCell.textContent = row['Name'];
                         nameCell.style.fontWeight = 'bold';
                         nameCell.style.fontSize = '16px';
+                        tr.appendChild(nameCell);
+                        const companyCell = document.createElement('td');
+                        companyCell.textContent = row['Company'];
+                        companyCell.style.fontWeight = 'bold';
+                        companyCell.style.fontSize = '16px';
                         tr.appendChild(nameCell);
                         const emailCell = document.createElement('td');
                         emailCell.textContent = row['Email'];
